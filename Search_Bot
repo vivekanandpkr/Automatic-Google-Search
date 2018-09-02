@@ -1,0 +1,39 @@
+#Sometimes google search is boring if you want to search for many keywords
+#Lets automate this. Just Open the excel and enter all the keywords which you  want to search. Run the bot then sit and watch.
+
+#Just import the packages
+import openpyxl
+import time
+my_book = openpyxl.load_workbook('Excel_File_Name.xlsx')
+my_sheet = my_book.get_sheet_by_name('Keywords_Sheets')
+t_row = my_sheet.max_row + 1
+my_list = range(2,t_row)
+
+
+#Navigate the Chrome Driver
+from selenium import webdriver
+import time
+driver = webdriver.Chrome("C:\\Users\\Python\\chromedriver\\chromedriver.exe")                    #Enter the chrome location
+driver.maximize_window()
+driver.implicitly_wait(2)
+driver.get("http:\\www.google.com")
+time.sleep(2)
+
+#Simple loop function 
+for num in my_list:
+    try:
+        customer_name = my_sheet.cell(row=num,column=1).value
+        driver.get("https://www.google.co.in/search?q=" + customer_name)
+        #time.sleep(1)
+        ans = driver.find_element_by_xpath("//div [@class = '_NId'][1]//span [@class='st']//em[1]")
+        data1 = ans.get_attribute('innerHTML')
+        my_sheet.cell(row=num,column=2).value = data1
+        print(num)
+    except:
+        continue
+
+
+#Save all keyword results in the excel. Simple data extraction from SERP
+my_book.save('Output_Search_Results.xlsx')
+print(t_row)
+
