@@ -1,2 +1,3 @@
 # Automatic-Google-Search
-To search it in the google
+
+Text mining from SERP (Search Engine Result Page)
